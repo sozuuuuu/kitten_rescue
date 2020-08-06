@@ -1,0 +1,13 @@
+<h1>New Adoption Request</h1>
+
+<%= form_tag({controller: 'adoption_requests', action: 'create'}, method: 'post') do %>
+  <%= hidden_field_tag(:request_id, @request_id) %>
+  <%= hidden_field_tag(:requester_id, @requester_id) %>
+  <label for="color">
+    Color
+  </label>
+  <%=  select_tag(:color, options_from_collection_for_select(Waiting::RequestAcceptance::VALID_COLORS, 'to_s', 'to_s')) %>
+
+  <%= submit_tag('submit') %>
+  <%= link_to 'back', "/users/#{@requester_id}" %>
+<% end %>

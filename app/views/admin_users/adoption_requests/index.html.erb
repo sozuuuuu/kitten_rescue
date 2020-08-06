@@ -1,0 +1,13 @@
+<h1>Requests</h1>
+
+<% flash.each do |type, msg| %>
+  <div class="<%= type %>">
+    <%= msg %>
+  </div>
+<% end %>
+
+<ul>
+  <% @requests.each do |r| %>
+    <li>[<%= r.state %>] Request: <%= r.uid %> by <%= r.requester %> | <%= link_to('approve', "/admin_users/#{params[:admin_user_uid]}/approved_adoption_requests?request_id=#{r.uid}", method: 'post') %></li>
+  <% end %>
+</ul>
