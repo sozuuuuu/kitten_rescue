@@ -56,7 +56,6 @@ module Dealing
     end
 
     def call(command)
-      puts 'on cancel_deal'
       deal_id = command.deal_id
       stream = "Dealing::Deal$#{deal_id}"
       deal = @repository.load(Deal.new, stream)

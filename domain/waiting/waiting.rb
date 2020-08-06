@@ -74,16 +74,8 @@ module Waiting
 
     private
 
-    def apply_acceptance_requested(event)
-      @color = event.data[:color]
-      @requester = event.data[:requester]
-      @state = :wait_for_approval
-    end
+    def apply_acceptance_requested(event); end
 
-    def apply_request_approved(event)
-      puts 'apply_request_approved', 'request_id', event.metadata[:request_id]
-      @approver = event.data[:approver]
-      @state = :approved
-    end
+    def apply_request_approved(event); end
   end
 end

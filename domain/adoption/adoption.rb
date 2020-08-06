@@ -42,8 +42,6 @@ module Adoption
 
     private
 
-    def apply_kitten_requested(event)
-      @color = event.data[:color]
-    end
+    def apply_kitten_requested(event); end
   end
 end
