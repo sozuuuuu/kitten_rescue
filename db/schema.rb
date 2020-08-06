@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_02_111912) do
+ActiveRecord::Schema.define(version: 2020_08_05_103914) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string "name"
@@ -27,6 +27,15 @@ ActiveRecord::Schema.define(version: 2020_08_02_111912) do
     t.string "uid"
     t.string "requester"
     t.string "approver"
+  end
+
+  create_table "deals", force: :cascade do |t|
+    t.string "adoption_request_id"
+    t.string "kitten_request_id"
+    t.string "state"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "uid"
   end
 
   create_table "event_store_events", id: :string, limit: 36, force: :cascade do |t|

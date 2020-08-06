@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :deals
   resources :admin_users, param: :uid do
     resources :adoption_requests, except: [:new, :create], controller: 'admin_users/adoption_requests'
     resources :approved_adoption_requests, only: [:create], controller: 'admin_users/approved_adoption_requests'

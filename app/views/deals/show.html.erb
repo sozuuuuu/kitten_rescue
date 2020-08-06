@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Adoption request:</strong>
+  <%= @deal.adoption_request_id %>
+</p>
+
+<p>
+  <strong>Kitten request:</strong>
+  <%= @deal.kitten_request_id %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @deal.state %>
+</p>
+
+<%= link_to 'Edit', edit_deal_path(@deal) %> |
+<%= link_to 'Back', deals_path %>

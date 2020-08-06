@@ -29,10 +29,8 @@ class AdminUsersController < ApplicationController
     respond_to do |format|
       if @admin_user.save
         format.html { redirect_to @admin_user, notice: 'Admin user was successfully created.' }
-        format.json { render :show, status: :created, location: @admin_user }
       else
         format.html { render :new }
-        format.json { render json: @admin_user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -43,10 +41,8 @@ class AdminUsersController < ApplicationController
     respond_to do |format|
       if @admin_user.update(admin_user_params)
         format.html { redirect_to @admin_user, notice: 'Admin user was successfully updated.' }
-        format.json { render :show, status: :ok, location: @admin_user }
       else
         format.html { render :edit }
-        format.json { render json: @admin_user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -57,7 +53,6 @@ class AdminUsersController < ApplicationController
     @admin_user.destroy
     respond_to do |format|
       format.html { redirect_to admin_users_url, notice: 'Admin user was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

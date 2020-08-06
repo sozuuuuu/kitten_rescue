@@ -8,41 +8,95 @@ end
 
 module Dealing
   class StartDeal < Dry::Struct
-    attribute :deal_id, Dry::Types::String
-    attribute :kitten_request_id, Dry::Types::String
-    attribute :adoption_request_id, Dry::Types::String
+    attribute :deal_id, Types::String
+    attribute :kitten_request_id, Types::String
+    attribute :adoption_request_id, Types::String
+  end
+
+  class CloseDeal < Dry::Struct
+    attribute :deal_id, Types::String
+  end
+
+  class CancelDeal < Dry::Struct
+    attribute :deal_id, Types::String
+    attribute :reason, Types::String
   end
 
   class OnStartDeal
-    def initialie(repository:)
+    def initialize(repository:)
       @repository = repository
     end
 
     def call(command)
-      aggregate_id = command.deal_id
-      stream = "Dealing::Deal$#{aggregate_id}"
+      deal_id = command.deal_id
+      stream = "Dealing::Deal$#{deal_id}"
       request = @repository.load(Deal.new, stream)
-      request.request_acceptance(aggregate_id, command.kitten_request_id, command.adoption_request_id)
+      request.start_deal(deal_id, command.adoption_request_id, command.kitten_request_id)
       @repository.store(request, stream)
+    end
+  end
+
+  class OnCloseDeal
+    def initialize(repository:)
+      @repository = repository
+    end
+
+    def call(command)
+      deal_id = command.deal_id
+      stream = "Dealing::Deal$#{deal_id}"
+      deal = @repository.load(Deal.new, stream)
+      deal.close(deal_id)
+      @repository.store(deal, stream)
+    end
+  end
+
+  class OnCancelDeal
+    def initialize(repository:)
+      @repository = repository
+    end
+
+    def call(command)
+      puts 'on cancel_deal'
+      deal_id = command.deal_id
+      stream = "Dealing::Deal$#{deal_id}"
+      deal = @repository.load(Deal.new, stream)
+      deal.cancel(deal_id, command.reason)
+      @repository.store(deal, stream)
     end
   end
 
   class Deal
     include AggregateRoot
 
-    def start_deal(adoption_request_id, acceptance_request_id)
+    class DealStarted < RailsEventStore::Event; end
+    class DealClosed < RailsEventStore::Event; end
+    class DealCanceled < RailsEventStore::Event; end
+
+    def start_deal(deal_id, adoption_request_id, kitten_request_id)
       apply DealStarted.new(data: {
+        deal_id: deal_id,
         adoption_request_id: adoption_request_id,
-        acceptance_request_id: acceptance_request_id
+        kitten_request_id: kitten_request_id
+      })
+    end
+
+    def close(deal_id)
+      apply DealClosed.new(data: {
+        deal_id: deal_id
+      })
+    end
+
+    def cancel(deal_id, reason)
+      apply DealCanceled.new(data: {
+        deal_id: deal_id,
+        reason: reason
       })
     end
 
     private
 
-    def apply_deal_started(event)
-      @state = :started
-      @adoption_request_id = event.data[:adoption_request_id]
-      @acceptance_request_id = event.data[:acceptance_request_id]
-    end
+    def apply_deal_started(_event); end
+    def apply_deal_closed(_event); end
+    def apply_deal_canceled(_event); end
   end
 end
