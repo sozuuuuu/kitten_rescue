@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @admin_user.name %>
+</p>
+
+<p>
+  <strong>Uid:</strong>
+  <%= @admin_user.uid %>
+</p>
+
+<%= link_to 'Edit', edit_admin_user_path(@admin_user) %> |
+<%= link_to 'Back', admin_users_path %> |
+<%= link_to 'Approve Requests', "/admin_users/#{@admin_user.uid}/adoption_requests" %>
